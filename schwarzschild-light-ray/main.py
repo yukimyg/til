@@ -16,124 +16,130 @@ def set_params(r_init, psi):
     return u0, v0
 
 
-def geodesic(t, y, a):
+def geodesic(t, y, a, b):
     return [y[1], -y[0] + 3 / 2 * a * y[0] ** 2]
 
 
-def holein(t, y, a):
+def holein(t, y, a, b):
     return 1 / a - y[0]
 
 
-def away(t, y, a):
-    return 1 / a - 15 * y[0]
+def away(t, y, a, b):
+    return 1 / a - b * y[0]
 
 
-def kyori(t, y, a):
+def kyori(t, y, a, b):
     return 1 / a - 5 * y[0]
+
+
+def orbit(sol, dfai, rs, split):
+    t_events = sol.t_events
+    # go away
+    if (t_events[0].size == 0) & (t_events[1].size != 0):
+        fai_event = t_events[1][0]
+        if fai_event - dfai > dfai:
+            u_event = sol.sol(fai_event)
+            r_event = 1 / u_event
+            fai_graph = np.linspace(0, fai_event - dfai, split)
+            u_graph = sol.sol(fai_graph)
+            r_graph = 1 / u_graph.T
+        else:
+            fai_event = 0
+            u_event = sol.sol(fai_event)
+            r_event = 1 / u_event.T
+            fai_graph = np.linspace(0, fai_event, split)
+            r_graph = np.linspace(r_event, r_event, split)  # seted finite value
+    # holein
+    elif (t_events[0].size != 0) & (t_events[1].size == 0):
+        fai_event = t_events[0][0]
+        if fai_event - dfai > dfai:
+            u_event = sol.sol(fai_event)
+            r_event = 1 / u_event.T
+            fai_graph = np.linspace(0, fai_event - dfai, split)
+            u_graph = sol.sol(fai_graph)
+            r_graph = 1 / u_graph.T
+        else:
+            fai_event = 0
+            u_event = sol.sol(fai_event)
+            r_event = 1 / u_event.T
+            fai_graph = np.linspace(0, fai_event, split)
+            r_graph = np.linspace(r_event, rs, split)
+    # circular orbit
+    else:
+        fai_event = t_events[1][0]
+        u_event = sol.sol(fai_event)
+        r_event = 1 / u_event.T
+        fai_graph = np.linspace(0, fai_event, split)
+        u_graph = sol.sol(fai_graph)
+        r_graph = 1 / u_graph.T
+    return fai_graph, r_graph
+
+
+def graph_plot(ax, sol, rs, fai_graph, r_graph, line_width):
+    ax.axis("off")
+    ax.plot(
+        fai_graph,
+        r_graph[:, 0] / rs,
+        marker="",
+        label="light_ray",
+        color="white",
+        lw=line_width,
+    )
+    # ax.plot(sol.t, 1 / sol.y[0] / rs, marker="o", ls="")
 
 
 def main():
     # Solar mass = 1
     mass = 1
     # rs = 1
-    r0 = 5
-    # arc degree
-    psi = 160
-
-    # step, related image size
+    r0 = 3
+    # step for ivp, related image size
     H = 4320
+    # arc degree
+    psi_list = np.linspace(128, 129.5, 100)
+    psi_list = psi_list[psi_list != 180]
+    # limit of distance for graph
+    limit = 5
+    # split for array for graph
+    split = 100
+    # line width of graph
+    lw = 0.25
+
     dfai = np.pi / H
 
     rs, r_init = set_value(mass, r0)
-    u0, v0 = set_params(r_init, psi)
 
-    t_span = [0, 4 * np.pi]
-    y0 = [u0, v0]
-
-    sol = solve_ivp(
-        geodesic,
-        t_span,
-        y0,
-        method="RK45",
-        args=(rs,),
-        events=(holein, away),
-        dense_output=True,
-    )
-
-    # print(sol.t)
-    # print(sol.y)
-    # print(sol.t_events)
-    # print(sol.y_events)
-    t0 = sol.t_events
-    # print(t0[0].size)
-
-    # 距離到達
-    if t0[0].size == 0:
-        td = t0[1][0]
-        if td - dfai > dfai:
-            z = sol.sol(td)
-            r = 1 / z.T
-            # print(r)
-            t1 = np.linspace(0, td - dfai, 10)
-            z1 = sol.sol(t1)
-            # print(sol.sol(td - dfai))
-            r1 = 1 / z1.T
-        else:
-            td = 0
-            z = sol.sol(td)
-            r = 1 / z.T
-            # print(td)
-            # print(r)
-            t1 = np.linspace(0, td, 10)
-            r1 = np.linspace(r, 15 * rs, 10)  # 到達半径
-    # 捕獲
-    elif t0[1].size == 0:
-        td = t0[0][0]
-        if td - dfai > dfai:
-            z = sol.sol(td)
-            r = 1 / z.T
-            # print(td)
-            # print(r)
-            t1 = np.linspace(0, td - dfai, 10)
-            z1 = sol.sol(t1)
-            # print(sol.sol(td - dfai))
-            r1 = 1 / z1.T
-        else:
-            td = 0
-            z = sol.sol(td)
-            r = 1 / z.T
-            # print(td)
-            # print(r)
-            t1 = np.linspace(0, td, 10)
-            r1 = np.linspace(r, rs, 10)
-    # 円軌道
-    else:
-        td = t0[1][0]
-        z = sol.sol(td)
-        r = 1 / z.T
-        # print(td)
-        # print(r)
-        t1 = np.linspace(0, td, 10)
-        z1 = sol.sol(t1)
-        # print(sol.sol(td))
-        r1 = 1 / z1.T
-
-    # print(t1)
-    # print(r1 / rs)
-
-    # plt.plot(t1, 1/z1.T, marker=".")
-    # plt.plot(t, 1/z.T, marker="o")
     ax = plt.subplot(111, projection="polar")
-    # plt.setp(ax, rorigin=0, rmin=rs, rmax=3*rs)
-    # ax.plot(t, r, marker="o")
-    ax.plot(t1, r1[:, 0] / rs, marker=".", label="light_ray")
+    for psi in psi_list:
+        u0, v0 = set_params(r_init, psi)
 
-    radious = np.ones(360)
+        t_span = [0, 4 * np.pi]
+        y0 = [u0, v0]
+
+        holein.terminal = True
+        away.terminal = True
+
+        sol = solve_ivp(
+            geodesic,
+            t_span,
+            y0,
+            method="RK45",
+            args=(rs, limit),
+            events=(holein, away),
+            dense_output=True,
+        )
+
+        fai_graph, r_graph = orbit(sol, dfai, rs, split)
+
+        graph_plot(ax, sol, rs, fai_graph, r_graph, lw)
+
+    radious_back = np.full(360, limit)
     circle = np.linspace(0, 2 * np.pi, 360)
+    ax.fill(circle, radious_back.T, color="grey")
+    radious = np.ones(360)
     ax.fill(circle, radious.T, color="k")
-    # plt.xlabel('fai')
-    # plt.legend(['u', 'v'], shadow=True)
-    # plt.title('light_ray')
+
+    plt.title("light ray")
     plt.show()
 
 
