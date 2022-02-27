@@ -29,6 +29,7 @@ resource "aws_instance" "web" {
   instance_type          = "t2.micro"
   vpc_security_group_ids = [aws_security_group.web.id]
   subnet_id              = aws_subnet.public.id
+  key_name               = aws_key_pair.key_pair.key_name
   tags = {
     Name = "WebServer"
   }
@@ -41,6 +42,7 @@ resource "aws_instance" "web" {
 
   depends_on = [
     aws_security_group.web,
+    aws_key_pair.key_pair,
     data.aws_ami.amzn2
   ]
 }
@@ -50,6 +52,7 @@ resource "aws_instance" "db" {
   instance_type          = "t2.micro"
   vpc_security_group_ids = [aws_security_group.db.id]
   subnet_id              = aws_subnet.public.id
+  key_name               = aws_key_pair.key_pair.key_name
   tags = {
     Name = "DBServer"
   }
@@ -62,6 +65,7 @@ resource "aws_instance" "db" {
 
   depends_on = [
     aws_security_group.db,
+    aws_key_pair.key_pair,
     data.aws_ami.amzn2
   ]
 }
