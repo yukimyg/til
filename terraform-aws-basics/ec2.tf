@@ -48,6 +48,7 @@ resource "aws_instance" "web" {
 resource "aws_instance" "db" {
   ami                    = data.aws_ami.amzn2.id
   instance_type          = "t2.micro"
+  vpc_security_group_ids = [aws_security_group.db.id]
   subnet_id              = aws_subnet.public.id
   tags = {
     Name = "DBServer"
@@ -60,6 +61,7 @@ resource "aws_instance" "db" {
   }
 
   depends_on = [
+    aws_security_group.db,
     data.aws_ami.amzn2
   ]
 }
