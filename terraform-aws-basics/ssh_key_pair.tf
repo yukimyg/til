@@ -1,6 +1,6 @@
 resource "tls_private_key" "key" {
-  algorithm   = "ECDSA"
-  ecdsa_curve = "P384"
+  algorithm = "RSA"
+  rsa_bits  = 4096
 }
 
 resource "aws_key_pair" "key_pair" {
