@@ -6,3 +6,11 @@ resource "aws_internet_gateway" "igw" {
   ]
 }
 
+resource "aws_nat_gateway" "natgw" {
+  connectivity_type = "private"
+  subnet_id         = aws_subnet.private.id
+
+  depends_on = [
+    aws_subnet.private
+  ]
+}
