@@ -5,12 +5,10 @@ terraform {
       source  = "hashicorp/aws"
       version = "~>3.0"
     }
-    local = {
-      source = "hashicorp/local"
-    }
   }
 
-  backend "remote" {
+  cloud {
+    # hostname     = "app.terraform.io"
     organization = "yukimiyagi"
     workspaces {
       name = "terraform_aws_basics"
