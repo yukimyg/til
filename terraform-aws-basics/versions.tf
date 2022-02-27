@@ -9,4 +9,11 @@ terraform {
       source = "hashicorp/local"
     }
   }
+
+  backend "remote" {
+    organization = "yukimiyagi"
+    workspaces {
+      name = "terraform_aws_basics"
+    }
+  }
 }
