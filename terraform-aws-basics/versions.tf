@@ -8,7 +8,6 @@ terraform {
   }
 
   cloud {
-    # hostname     = "app.terraform.io"
     organization = "yukimiyagi"
     workspaces {
       name = "terraform_aws_basics"
