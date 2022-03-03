@@ -3,7 +3,7 @@ data "aws_ami" "amzn2" {
 
   filter {
     name   = "name"
-    values = ["amzn-ami-hvm-*-*-*"]
+    values = ["amzn2-ami-hvm-*-*-*"]
   }
 
   filter {
@@ -19,6 +19,10 @@ data "aws_ami" "amzn2" {
   filter {
     name   = "block-device-mapping.volume-type"
     values = ["gp2"]
+  }
+  filter {
+    name   = "state"
+    values = ["available"]
   }
 
   owners = ["amazon"]
