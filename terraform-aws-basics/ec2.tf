@@ -33,6 +33,7 @@ resource "aws_instance" "web" {
   instance_type          = "t2.micro"
   vpc_security_group_ids = [aws_security_group.web.id]
   subnet_id              = aws_subnet.public.id
+  private_ip             = "10.0.1.10"
   key_name               = aws_key_pair.key_pair.key_name
   tags = {
     Name = "WebServer"
@@ -55,7 +56,8 @@ resource "aws_instance" "db" {
   ami                    = data.aws_ami.amzn2.id
   instance_type          = "t2.micro"
   vpc_security_group_ids = [aws_security_group.db.id]
-  subnet_id              = aws_subnet.public.id
+  subnet_id              = aws_subnet.private.id
+  private_ip             = "10.0.2.10"
   key_name               = aws_key_pair.key_pair.key_name
   tags = {
     Name = "DBServer"
