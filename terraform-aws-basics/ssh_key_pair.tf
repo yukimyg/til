@@ -6,6 +6,10 @@ resource "tls_private_key" "key" {
 resource "aws_key_pair" "key_pair" {
   key_name   = "my-key"
   public_key = tls_private_key.key.public_key_openssh
+
+  depends_on = [
+    tls_private_key.key
+  ]
 }
 
 resource "local_file" "ssh_private_key" {
@@ -13,4 +17,8 @@ resource "local_file" "ssh_private_key" {
   filename             = "${aws_key_pair.key_pair.key_name}.pem"
   file_permission      = "400"
   directory_permission = "400"
+
+  depends_on = [
+    aws_key_pair.key_pair
+  ]
 }
