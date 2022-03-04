@@ -1,9 +1,11 @@
 # Terraform AWS Basics
 
 ## Overview
+
 A simple IT infrastructure of blog system on AWS, create and manage with Terraform.
 
 ## Description
+
 I read [Amazon Web Services 基礎からのネットワーク＆サーバー構築　改訂3版](https://www.amazon.co.jp/Amazon-Web-Services-基礎からのネットワーク＆サーバー構築-改訂3版-大澤-ebook/dp/B084QQ7TCF).
 This shows how to build a simple blog system on AWS for begginer.
 I rebuild it with terraform.
@@ -59,40 +61,56 @@ terraform apply
 ssh to EC2 instance in public subnet.
 (`PUBLIC_ADD` is `web_public_ip`, output value of terraform.)
 
-```sh
+<!-- ```sh
 ssh -i my-key.pem ec2-user@${PUBLIC_ADD}
+``` -->
+```sh
+export PUBLIC_ADD = "${web_public_ip}"
+source local.sh
 ```
 
 Setup it as WebServer.
 
 ```sh
-source web_init.sh
+[ec2-user@ip-10-0-1-10 ~]$ source web_init.sh
 ```
 
 ssh to EC2 instance in private subnet from WebServer is done.
 setup it as DBServer.
-First, set password.  
+<!-- First, set password.  
 For example,
 
 ```sh
-export MYSQL_PWD='mariapassword'
-```
+[ec2-user@ip-10-0-2-10 ~]$ export MYSQL_PWD='mariapassword'
+``` -->
 
-Second, run the following commands.
+run the following commands.
+Set password of root.
 
 ```sh
-source db_init.sh
+[ec2-user@ip-10-0-2-10 ~]$ source db_init.sh
 ```
 
 Exit DBServer and return to WebServer, setup Wordpress.
 
 ```sh
-exit
-source set_wp.sh
+[ec2-user@ip-10-0-2-10 ~]$ exit
+[ec2-user@ip-10-0-1-10 ~]$ source set_wp.sh
 ```
 
 Now, you can start WordPress.
-Access your `PUBLIC_ADD` with a browser. 
+Access your `PUBLIC_ADD` with a browser, enter the following values .
+
+- DataBase Name
+  - wordpress
+- User Name
+  - wordpress
+- Password
+  - wordpresspasswd
+- Host Name of DataBase
+  - 10.0.2.10
+- Table prefix
+  - wp_
 <!-- ## Install -->
 
 ## Author
