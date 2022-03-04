@@ -3,9 +3,10 @@
 
 sudo yum -y install mariadb-server
 sudo systemctl start mariadb
-# mysqladmin -u root password
-
-mysqladmin -u root -p$MYSQL_PWD
-mysql -u root -p$MYSQL_PWD < db.sql
-
 sudo systemctl enable mariadb
+
+# mysqladmin -u root -p$MYSQL_PWD
+# mysql -u root -p$MYSQL_PWD < db.sql
+
+mysqladmin -u root password
+mysql -u root -p < db.sql
