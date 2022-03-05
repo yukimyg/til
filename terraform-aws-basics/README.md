@@ -8,6 +8,10 @@ A simple IT infrastructure of blog system on AWS, create and manage with Terrafo
 
 I read [Amazon Web Services 基礎からのネットワーク＆サーバー構築　改訂3版](https://www.amazon.co.jp/Amazon-Web-Services-基礎からのネットワーク＆サーバー構築-改訂3版-大澤-ebook/dp/B084QQ7TCF).
 This shows how to build a simple blog system on AWS for begginer.
+The configuration diagram is as follows.
+
+<img src="./docs/aws-basics.drawio.svg" alt="draw.io" title="configuration">
+
 I rebuild it with terraform.
 
 <!-- ## Demo -->
