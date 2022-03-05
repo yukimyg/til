@@ -59,40 +59,56 @@ terraform apply
 ssh to EC2 instance in public subnet.
 (`PUBLIC_ADD` is `web_public_ip`, output value of terraform.)
 
-```sh
+<!-- ```sh
 ssh -i my-key.pem ec2-user@${PUBLIC_ADD}
+``` -->
+```sh
+export PUBLIC_ADD = "${web_public_ip}"
+source local.sh
 ```
 
 Setup it as WebServer.
 
 ```sh
-source web_init.sh
+[ec2-user@ip-10-0-1-10 ~]$ source web_init.sh
 ```
 
 ssh to EC2 instance in private subnet from WebServer is done.
 setup it as DBServer.
-First, set password.  
+<!-- First, set password.  
 For example,
 
 ```sh
-export MYSQL_PWD='mariapassword'
-```
+[ec2-user@ip-10-0-2-10 ~]$ export MYSQL_PWD='mariapassword'
+``` -->
 
-Second, run the following commands.
+run the following commands.
+Set password of root.
 
 ```sh
-source db_init.sh
+[ec2-user@ip-10-0-2-10 ~]$ source db_init.sh
 ```
 
 Exit DBServer and return to WebServer, setup Wordpress.
 
 ```sh
-exit
-source set_wp.sh
+[ec2-user@ip-10-0-2-10 ~]$ exit
+[ec2-user@ip-10-0-1-10 ~]$ source set_wp.sh
 ```
 
 Now, you can start WordPress.
-Access your `PUBLIC_ADD` with a browser. 
+Access your `PUBLIC_ADD` with a browser, enter the following values .
+
+- DataBase Name
+  - wordpress
+- User Name
+  - wordpress
+- Password
+  - wordpresspasswd
+- Host Name of DataBase
+  - 10.0.2.10
+- Table prefix
+  - wp_
 <!-- ## Install -->
 
 ## Author
