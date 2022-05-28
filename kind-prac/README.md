@@ -23,3 +23,13 @@ Edit [kind.yaml](kind.yaml) as you like.
 kind create cluster --config kind.yaml
 kubectl get node
 ```
+
+### Deploy Resources
+```sh
+kubectl apply -f manifests/nginx.yaml
+```
+
+### Delete Resources
+```sh
+kubectl delete -f manifests/nginx.yaml
+```
