@@ -5,4 +5,14 @@ metadata:
 spec:
   containers:
   - name: nginx
-    image: nginx
+    image: nginx:alpine
+    imagePullPolicy: Always
+    command: []
+    args: ["nginx", "-g", "daemon off;"]
+    env:
+    - name: HOGEHOGE
+      value: fugafuga
+    ports:
+    - containerPort: 80
+      protocol: TCP
+    workingDir: /tmp

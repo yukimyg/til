@@ -29,6 +29,13 @@ kubectl get node
 kubectl apply -f manifests/nginx.yaml
 ```
 
+### Check containers settings
+```sh
+kc exec nginx -- ps
+kc exec nginx -- env
+kc exec nginx -- readlink /proc/1/cwd
+```
+
 ### Delete Resources
 ```sh
 kubectl delete -f manifests/nginx.yaml
