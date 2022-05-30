@@ -28,25 +28,21 @@ kubectl get node
 ### Deploy Resources
 
 ```sh
-kubectl apply -f manifests/date-tail.yaml
+kubectl apply -f initcontainer-test.yaml && kubectl get po -w
 ```
 
-### Check containers settings
+### Check how it was done
 
 ```sh
-kubectl exec -it date-tail -c date -- ls /var/log/date-tail
-kubectl exec -it date-tail -c tail -- ls /var/log/date-tail
-kubectl logs date-tail -c tail -f --tail=10
-```
-
-replace pods and check dates
-```sh
-kubectl replace --force -f manifests/date-tail.yaml
-kubectl logs date-tail -c tail -f
+kubectl logs initcntnr-test -c step1
+kubectl logs initcntnr-test -c step2
+kubectl logs initcntnr-test -c step3
+kubectl logs initcntnr-test -c app1
+kubectl logs initcntnr-test -c app2
 ```
 
 ### Delete Resources
 
 ```sh
-kubectl delete -f manifests/date-tail.yaml
+kubectl delete -f manifests/initcntnr-test.yaml
 ```
