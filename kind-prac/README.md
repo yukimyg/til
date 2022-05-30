@@ -28,19 +28,25 @@ kubectl get node
 ### Deploy Resources
 
 ```sh
-kubectl apply -f manifests/nginx.yaml
+kubectl apply -f manifests/date-tail.yaml
 ```
 
 ### Check containers settings
 
 ```sh
-kc exec nginx -- ps
-kc exec nginx -- env
-kc exec nginx -- readlink /proc/1/cwd
+kubectl exec -it date-tail -c date -- ls /var/log/date-tail
+kubectl exec -it date-tail -c tail -- ls /var/log/date-tail
+kubectl logs date-tail -c tail -f --tail=10
+```
+
+replace pods and check dates
+```sh
+kubectl replace --force -f date-tail.yaml
+kubectl logs date-tail -c tail -f
 ```
 
 ### Delete Resources
 
 ```sh
-kubectl delete -f manifests/nginx.yaml
+kubectl delete -f manifests/date-tail.yaml
 ```
