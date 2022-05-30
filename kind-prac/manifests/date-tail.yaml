@@ -29,5 +29,6 @@ spec:
       mountPath: /var/log/date-tail
   volumes:
   - name: log-volume
-    emptyDir:
+    hostPath:
+      path: /data/date-tail
   terminationGracePeriodSeconds: 0
