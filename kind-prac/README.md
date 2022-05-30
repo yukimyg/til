@@ -41,7 +41,7 @@ kubectl logs date-tail -c tail -f --tail=10
 
 replace pods and check dates
 ```sh
-kubectl replace --force -f date-tail.yaml
+kubectl replace --force -f manifests/date-tail.yaml
 kubectl logs date-tail -c tail -f
 ```
 
