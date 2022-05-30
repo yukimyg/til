@@ -27,21 +27,34 @@ kubectl get node
 
 ### Deploy Resources
 
-edit number of `exit` command in [lifecycle-check.yaml](manifests/lifecycle-check.yaml) to other, try to check the logs and behavior.  
-The handler's log can be checked only when the pod is terminated abnormally.
-
 ```sh
-kubectl apply -f manifests/lifecycle-check.yaml && kubectl get po -w
+kubectl apply -f manifests/rs.yaml && kubectl get po -w
 ```
 
-### Check how it was done
+### Check settings
 
 ```sh
-kubectl describe pod lifecycle-check
+kubectl get replicaset
+kubectl get pod
+```
+
+### Change replica number
+
+Take one of the following methods.  
+After this, check settings as above.
+
+#### Edit manifest file
+
+Change `spec:replicas:` of [rs.yaml](manifests/rs.yaml#L6).
+
+#### scale command
+
+```sh
+kubectl scale --replicas=1 -f rs.yaml
 ```
 
 ### Delete Resources
 
 ```sh
-kubectl delete -f manifests/lifecycle-check.yaml
+kubectl delete -f manifests/rs.yaml
 ```
