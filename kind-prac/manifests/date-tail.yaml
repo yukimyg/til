@@ -3,12 +3,24 @@ kind: Pod
 metadata:
   name: date-tail
 spec:
+  initContainers:
+  - name: touch
+    image: alpine
+    command: ["sh", "-c"]
+    args:
+    - |
+      echo Initialize... (Started at `date`)
+      touch /var/log/date-tail/output.log
+    volumeMounts:
+    - name: log-volume
+      mountPath: /var/log/date-tail
   containers:
   - name: date
     image: alpine
     command: ["sh", "-c"]
     args:
     - |
+      echo Append log... (Started at `date`)
       exec >> /var/log/date-tail/output.log
       echo -n 'Start at: '
       while true; do
@@ -23,12 +35,12 @@ spec:
     command: ["sh", "-c"]
     args:
     - |
+      echo Following... (Started at `date`)
       tail -f /var/log/date-tail/output.log
     volumeMounts:
     - name: log-volume
       mountPath: /var/log/date-tail
   volumes:
   - name: log-volume
-    hostPath:
-      path: /data/date-tail
+    emptyDir:
   terminationGracePeriodSeconds: 0
