@@ -27,22 +27,21 @@ kubectl get node
 
 ### Deploy Resources
 
+edit number of `exit` command in [lifecycle-check.yaml](manifests/lifecycle-check.yaml) to other, try to check the logs and behavior.  
+The handler's log can be checked only when the pod is terminated abnormally.
+
 ```sh
-kubectl apply -f initcontainer-test.yaml && kubectl get po -w
+kubectl apply -f manifests/lifecycle-check.yaml && kubectl get po -w
 ```
 
 ### Check how it was done
 
 ```sh
-kubectl logs initcntnr-test -c step1
-kubectl logs initcntnr-test -c step2
-kubectl logs initcntnr-test -c step3
-kubectl logs initcntnr-test -c app1
-kubectl logs initcntnr-test -c app2
+kubectl describe pod lifecycle-check
 ```
 
 ### Delete Resources
 
 ```sh
-kubectl delete -f manifests/initcntnr-test.yaml
+kubectl delete -f manifests/lifecycle-check.yaml
 ```
