@@ -43,3 +43,66 @@ If LivenessProbe fails, the container is killed and re-created and started again
 ```sh
 kubectl delete -f liveness-check.yaml
 ```
+---
+
+### Deploy Resources
+
+```sh
+kubectl apply -f readness.yaml
+```
+
+### Check `Readiness:`
+
+```sh
+kubectl describe po/liveness-check
+```
+
+### Check conection to Service
+Connecting to containers via services
+```sh
+kubectl run -it --rm alpine --image alpine -- ash
+```
+```sh
+wget -O - -T 1 readiness-check-svc
+exit
+```
+Successfully connected.  
+
+### Fail Liveness prove
+
+```sh
+kubectl exec liveness-check -- rm /usr/share/nginx/html/index.html
+kubectl describe po/liveness-check | tail
+```
+
+### Check conection to Service
+Connecting to containers via services
+```sh
+kubectl run -it --rm alpine --image alpine -- ash
+```
+```sh
+wget -O - -T 1 readiness-check-svc
+exit
+```
+Connection fails.  
+
+### Establish a ReadinessProbe connection
+create `index.html`
+```sh
+kubectl exec readiness-check -- sh -c 'echo ok > /usr/share/nginx/html/index.html'
+```
+Connecting to containers via services.  
+```sh
+kubectl run -it --rm alpine --image alpine -- ash
+```
+```sh
+wget -O - -T 1 readiness-check-svc
+exit
+```
+Successfully connected. 
+
+### Delete Resources
+
+```sh
+kubectl delete -f readiness.yaml
+```
