@@ -101,3 +101,18 @@ Delete Resources
 kubectl delete -f volume-test.yaml
 ```
 
+#### with ENV variables
+
+```sh
+kubectl apply -f env-test.yaml
+```
+
+```sh
+kubectl exec env-test -- env
+```
+
+Delete Resources
+
+```sh
+kubectl delete -f env-test.yaml
+```
