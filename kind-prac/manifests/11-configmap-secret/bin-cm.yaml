@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: bin-cm
+binaryData:
+  raw-urandom: 9s3MOyAYi1uyUVpsIX3AqGtnVxQ=
+
