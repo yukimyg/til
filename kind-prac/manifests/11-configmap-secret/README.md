@@ -44,3 +44,23 @@ kc get configmap/bin-cm -o yaml
 kubectl delete -f test-cm.yaml
 kubectl delete -f bin-cm.yaml
 ```
+
+### Sercret
+
+#### test-scrt
+
+```sh
+$ echo -n 'mypassword' | base64
+bXlwYXNzd29yZA==
+```
+
+```sh
+kubectl apply -f test-scrt.yaml
+kc get secret/test-scrt -o yaml
+```
+
+#### Delete Resources
+
+```sh
+kubectl delete -f test-scrt.yaml
+```
