@@ -59,8 +59,16 @@ kubectl apply -f test-scrt.yaml
 kc get secret/test-scrt -o yaml
 ```
 
+#### test-str-scrt
+
+```sh
+kubectl apply -f test-str-scrt.yaml
+kc get secret/test-str-scrt -o yaml
+```
+
 #### Delete Resources
 
 ```sh
 kubectl delete -f test-scrt.yaml
+kubectl delete -f test-str-scrt.yaml
 ```
