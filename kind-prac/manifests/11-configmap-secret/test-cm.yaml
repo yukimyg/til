@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: test-cm
+data:
+  HOGEHOGE: FUGAFUGA
+  config.txt: |
+    hogehoge
+    fugafuga
+    foo bar baz
