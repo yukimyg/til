@@ -33,3 +33,26 @@ kubectl exec pvc-slow-test -- ls -l /data
 ```sh
 kubectl delete -f pv0001.yaml
 ```
+---
+
+#### volumeBindingMode
+
+Deploy StorageClass, PersistentVolume, PersistentVolumeClaim
+```sh
+kubectl apply -f pv-delay-bind.yaml
+kubectl get sc,pv,pvc
+```
+
+Deploy Pod to be Binding PVC because of [WaitForFirstConsumer](./pv-delay-bind.yaml#L6)
+
+```sh
+kubectl apply -f pv-delay-bind-test.yaml
+kubectl get sc,pv,pvc,po
+```
+
+#### Delete Resources
+
+```sh
+kubectl delete -f pv-delay-bind.yaml
+kubectl delete -f pv-delay-bind-test.yaml
+```
