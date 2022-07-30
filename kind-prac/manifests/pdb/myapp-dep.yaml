@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp
+spec:
+  replicas: 2 # レプリカ数の設定
+  selector:
+    matchLabels:
+      app: myapp
+  template:
+    metadata:
+      labels:
+        app: myapp
+    spec:
+      containers:
+      - image: nginx:1.13
+        name: myapp
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 30 # ready まで 2 分かかる設定
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: myapp
+spec:
+  maxUnavailable: 1
+  selector:
+    matchLabels:
+      run: myapp
